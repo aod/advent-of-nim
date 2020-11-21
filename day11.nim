@@ -1,0 +1,54 @@
+import strutils
+import ./core
+
+type Password = string
+
+func has3LettersIncrease(password: Password): bool =
+  for triples in password.partial(3):
+    if triples.hasStraightIncrease:
+      return true
+  return false
+
+func hasBadLetters(password: Password): bool =
+  {'i', 'o', 'l'} in password
+
+func hasNonOverlappingPairs(password: Password): bool =
+  var paired: set[char] = {}
+  for pair in password.partial(2):
+    if pair[0] == pair[1]:
+      paired.incl(pair[0])
+  return paired.card >= 2
+
+func isValid(p: Password): bool =
+  return not p.hasBadLetters and 
+             p.has3LettersIncrease and
+             p.hasNonOverlappingPairs
+
+func `++`(s: var Password) =
+  for i in countdown(s.high, 0):
+    if s[i] == 'z':
+      s[i] = 'a'
+    else:
+      s[i] = succ(s[i])
+      break
+
+func nextValid(password: var Password): Password =
+  doWhile not password.isValid:
+    ++password
+  return password
+
+when isMainModule:
+  var password = "hepxcrrq"
+
+  echo "Part 1: ", password.nextValid
+  assert(password == "hepxxyzz")
+
+  echo "Part 2: ", password.nextValid
+  assert(password == "heqaabcc")
+
+  static:
+    assert "hijklmmn".has3LettersIncrease
+    assert "hijklmmn".hasBadLetters
+    assert "abbceffg".hasNonOverlappingPairs
+    assert not "abbceffg".has3LettersIncrease
+    assert not "abbcegjk".hasNonOverlappingPairs
