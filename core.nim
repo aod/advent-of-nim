@@ -1,3 +1,7 @@
+const IsPart2* = defined(part2)
+const IsPart1* = not IsPart2
+const Part* = if IsPart1: 1 else: 2
+
 iterator partial*[T](s: openArray[T], n: Positive = 3): seq[T] =
   for i in s.low .. s.len - n:
     yield s[i ..< i + n]
