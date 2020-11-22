@@ -26,11 +26,10 @@ func isValid(p: Password): bool =
 
 func `++`(s: var Password) =
   for i in countdown(s.high, 0):
-    if s[i] == 'z':
-      s[i] = 'a'
-    else:
+    if s[i] < 'z':
       s[i] = succ(s[i])
-      break
+      return
+    s[i] = 'a'
 
 func nextValid(password: var Password): Password =
   doWhile not password.isValid:
