@@ -7,7 +7,6 @@ func has3LettersIncrease(password: Password): bool =
   for triples in password.partial(3):
     if triples.hasStraightIncrease:
       return true
-  return false
 
 func hasBadLetters(password: Password): bool =
   {'i', 'o', 'l'} in password
@@ -17,7 +16,7 @@ func hasNonOverlappingPairs(password: Password): bool =
   for pair in password.partial(2):
     if pair[0] == pair[1]:
       paired.incl(pair[0])
-  return paired.card >= 2
+  paired.card >= 2
 
 func isValid(p: Password): bool =
   return not p.hasBadLetters and 
@@ -34,7 +33,7 @@ func `++`(s: var Password) =
 func nextValid(password: var Password): Password =
   doWhile not password.isValid:
     ++password
-  return password
+  password
 
 when isMainModule:
   var password = "hepxcrrq"
