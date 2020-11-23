@@ -19,9 +19,7 @@ func hasNonOverlappingPairs(password: Password): bool =
   paired.card >= 2
 
 func isValid(p: Password): bool =
-  return not p.hasBadLetters and 
-             p.has3LettersIncrease and
-             p.hasNonOverlappingPairs
+  not p.hasBadLetters and p.has3LettersIncrease and p.hasNonOverlappingPairs
 
 func `++`(s: var Password) =
   for i in countdown(s.high, 0):
