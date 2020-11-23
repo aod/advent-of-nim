@@ -24,7 +24,7 @@ proc optimalSeatingArrangement(arrangementPlan: string): Happiness =
     discard scanf(potential, "$w would $w $i happiness units by sitting next to $w",
                   name, state, happiness, neighbour)
     if state == "lose": happiness *= -1
-  
+
     var person = potentialHappiness.mgetOrPut(name, Person(name: name))
     person.happiness[neighbour] = happiness
 
@@ -41,7 +41,7 @@ proc optimalSeatingArrangement(arrangementPlan: string): Happiness =
       let left = arrangement[floorMod((idx - 1), arrangement.len)]
       let right = arrangement[floorMod((idx + 1), arrangement.len)]
       let person = potentialHappiness[name]
-      sum += person.happiness.getOrDefault(left) + 
+      sum += person.happiness.getOrDefault(left) +
              person.happiness.getOrDefault(right)
     if sum > result: result = sum
 
@@ -53,7 +53,7 @@ when isMainModule:
     assert output == 733
   else:
     assert output == 725
-    
+
   echo "Part ", Part, ": ", output
 
   static:
