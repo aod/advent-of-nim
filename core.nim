@@ -13,7 +13,6 @@ func hasStraightIncrease*[T: Ordinal](xs: openArray[T]): bool =
   true
 
 template doWhile*(a: typed, b: typed) =
-  while true:
+  b
+  while a:
     b
-    if not a:
-      break
