@@ -1,3 +1,5 @@
+import options
+
 const IsPart2* = defined(part2)
 const IsPart1* = not IsPart2
 const Part* = if IsPart1: 1 else: 2
@@ -11,6 +13,11 @@ func hasStraightIncrease*[T: Ordinal](xs: openArray[T]): bool =
     if ord(x[1]) - ord(x[0]) != 1:
       return false
   true
+
+func neighbours*[T](xs: openArray[T], index: int): (Option[T], Option[T]) =
+  if xs.len > 0:
+    return (some(xs[floorMod(index - 1, xs.len)]),
+            some(xs[floorMod(index + 1, xs.len)]))
 
 template doWhile*(a: typed, b: typed) =
   b

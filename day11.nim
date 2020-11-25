@@ -28,22 +28,18 @@ func `++`(s: var Password) =
       return
     s[i] = 'a'
 
-func nextValid(password: var Password): Password {.discardable.} =
+func nextValid(password: var Password): Password =
   doWhile not password.isValid:
     ++password
   password
 
 when isMainModule:
-  var password = "hepxcrrq"
-  password.nextValid
+  var password = stdin.readLine
 
-  when IsPart1:
-    assert password == "hepxxyzz"
-  else:
-    password.nextValid
-    assert password == "heqaabcc"
+  when IsPart2:
+    discard password.nextValid
 
-  echo "Part ", Part, ": ", password
+  echo "Part ", Part, ": ", password.nextValid
 
   static:
     assert "hijklmmn".has3LettersIncrease
