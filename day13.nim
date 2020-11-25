@@ -9,7 +9,7 @@ type
     name: Name
     happiness: Table[Name, Happiness]
 
-proc optimalSeatingArrangement(arrangementPlan: string): Happiness =
+func optimalSeatingArrangement(arrangementPlan: string): Happiness =
   var potentialHappiness: Table[Name, Person]
 
   for potential in arrangementPlan.splitLines:
