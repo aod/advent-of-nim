@@ -1,4 +1,4 @@
-import strutils
+import std/strutils
 import ./core
 
 type Password = string

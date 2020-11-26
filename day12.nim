@@ -1,4 +1,4 @@
-import json, strutils
+import std/[json, strutils]
 import ./core
 
 func sumAllNumbers(node: JsonNode): int =

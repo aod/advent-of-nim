@@ -1,4 +1,5 @@
-import options
+import std/options
+export options
 
 const IsPart2* = defined(part2)
 const IsPart1* = not IsPart2
@@ -14,7 +15,7 @@ func hasStraightIncrease*[T: Ordinal](xs: openArray[T]): bool =
       return false
   true
 
-func neighbours*[T](xs: openArray[T], index: int): (Option[T], Option[T]) =
+func neighbours*[T](xs: openArray[T], index: int): tuple[left, right: Option[T]] =
   if xs.len > 0:
     return (some(xs[floorMod(index - 1, xs.len)]),
             some(xs[floorMod(index + 1, xs.len)]))

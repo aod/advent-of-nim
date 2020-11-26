@@ -1,4 +1,4 @@
-import tables, sequtils, algorithm, strutils, strscans, math, options
+import std/[tables, sequtils, algorithm, strutils, strscans, math]
 import ./core
 
 type
@@ -25,13 +25,14 @@ func optimalSeatingArrangement(arrangementPlan: string): Happiness =
 
   var arrangement = toSeq(potentialHappiness.keys)
   when IsPart2:
-    arrangement.add("Oktay")
+    const yourself = "Me"
+    arrangement.add(yourself)
 
   doWhile arrangement.nextPermutation:
     var sum = 0
     for idx, name in arrangement.pairs:
       when IsPart2:
-        if name == "Oktay": continue
+        if name == yourself: continue
 
       let (left, right) = arrangement.neighbours(idx)
       let person = potentialHappiness[name]
