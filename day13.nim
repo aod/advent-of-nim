@@ -1,4 +1,4 @@
-import std/[tables, sequtils, algorithm, strutils, strscans, math]
+import std/[tables, sequtils, algorithm, strutils, strscans]
 import ./core
 
 type

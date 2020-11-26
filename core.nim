@@ -1,4 +1,4 @@
-import std/options
+import std/[options, math]
 export options
 
 const IsPart2* = defined(part2)
@@ -20,7 +20,7 @@ func neighbours*[T](xs: openArray[T], index: int): tuple[left, right: Option[T]]
     return (some(xs[floorMod(index - 1, xs.len)]),
             some(xs[floorMod(index + 1, xs.len)]))
 
-template doWhile*(a: typed, b: typed) =
-  b
-  while a:
-    b
+template doWhile*(cond: typed, body: typed) =
+  body
+  while cond:
+    body
