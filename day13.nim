@@ -20,8 +20,8 @@ func optimalSeatingArrangement(arrangementPlan: string): Happiness =
                   name, state, happiness, neighbour)
     if state == "lose": happiness *= -1
 
-    var person = potentialHappiness.mgetOrPut(name, Person(name: name))
-    person.happiness[neighbour] = happiness
+    potentialHappiness.mgetOrPut(name, Person(name: name))
+      .happiness[neighbour] = happiness
 
   var arrangement = toSeq(potentialHappiness.keys)
   when IsPart2:
