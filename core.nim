@@ -20,6 +20,12 @@ func neighbours*[T](xs: openArray[T], index: int): tuple[left, right: Option[T]]
     return (some(xs[floorMod(index - 1, xs.len)]),
             some(xs[floorMod(index + 1, xs.len)]))
 
+func `+`*[T: SomeNumber](x, y: seq[T]): seq[T] =
+  let (smallest, biggest) = if x.high > y.high: (y, x) else: (x, y)
+  result = biggest
+  for i, v in smallest.pairs:
+    result[i] += v
+
 template doWhile*(cond: typed, body: typed) =
   body
   while cond:
