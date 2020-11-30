@@ -13,16 +13,16 @@ type
     txr: int # texture
     cal: int # calories
 
-func listedProps(p: Ingredient): seq[int] =
-  result = @[p.cap, p.dur, p.fla, p.txr]
+func listedProps(i: Ingredient): seq[int] =
+  result = @[i.cap, i.dur, i.fla, i.txr]
   when IsPart2:
-    result.add(p.cal)
+    result.add(i.cal)
 
 func parse(properties: string): Ingredient =
-  var x: Ingredient
+  var i: Ingredient
   const pattern = "$w: capacity $i, durability $i, flavor $i, texture $i, calories $i$."
-  discard scanf(properties, pattern, x.name, x.cap, x.dur, x.fla, x.txr, x.cal)
-  x
+  discard scanf(properties, pattern, i.name, i.cap, i.dur, i.fla, i.txr, i.cal)
+  i
 
 proc bestCookieScore(kitchenIngredients: string): Score =
   var ingredients = kitchenIngredients.splitLines.map(x => x.parse)
