@@ -1,4 +1,4 @@
-import std/[strutils, strscans]
+import std/strscans
 import ./core
 
 type
@@ -79,7 +79,7 @@ proc distWinningReindeer(reindeerDesc: string,
       result = result.max(rd.points)
 
 when isMainModule:
-  echo "Part ", Part, ": ", stdin.readAll.strip.distWinningReindeer
+  echo fmt"Part {P}: {stdin.readAll.strip.distWinningReindeer}"
 
   static:
     when IsPart1:

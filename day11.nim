@@ -1,4 +1,3 @@
-import std/strutils
 import ./core
 
 type Password = string
@@ -35,11 +34,10 @@ func nextValid(password: var Password): Password =
 
 when isMainModule:
   var password = stdin.readLine
-
   when IsPart2:
     discard password.nextValid
 
-  echo "Part ", Part, ": ", password.nextValid
+  echo fmt"Part {P}: {password.nextValid}"
 
   static:
     assert "hijklmmn".has3LettersIncrease

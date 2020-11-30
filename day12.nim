@@ -1,4 +1,4 @@
-import std/[json, strutils]
+import std/json
 import ./core
 
 func sumAllNumbers(node: JsonNode): int =
@@ -19,7 +19,7 @@ func sumAllNumbers(node: JsonNode): int =
     discard
 
 when isMainModule:
-  echo "Part ", Part, ": ", stdin.readAll.strip.parseJson.sumAllNumbers
+  echo fmt"Part {P}: {stdin.readAll.strip.parseJson.sumAllNumbers}"
 
   static:
     when IsPart1:

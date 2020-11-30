@@ -1,4 +1,4 @@
-import std/[algorithm, sequtils, sugar, strscans, strformat, strutils]
+import std/[algorithm, sequtils, sugar, strscans]
 import ./core
 
 type
@@ -48,7 +48,7 @@ proc bestCookieScore(kitchenIngredients: string): Score =
       result = result.max(props[0 ..< ^1].foldl(a * b))
 
 when isMainModule:
-  echo fmt"Part {Part}: {stdin.readAll.strip.bestCookieScore}"
+  echo fmt"Part {P}: {stdin.readAll.strip.bestCookieScore}"
 
   static:
     const example = """Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8

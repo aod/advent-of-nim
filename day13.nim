@@ -1,4 +1,4 @@
-import std/[tables, sequtils, algorithm, strutils, strscans]
+import std/[tables, sequtils, algorithm, strscans]
 import ./core
 
 type
@@ -42,7 +42,7 @@ func optimalSeatingArrangement(arrangementPlan: string): Happiness =
     result = max(result, sum)
 
 when isMainModule:
-  echo "Part ", Part, ": ", stdin.readAll.strip.optimalSeatingArrangement
+  echo fmt"Part {P}: {stdin.readAll.strip.optimalSeatingArrangement}"
 
   static:
     when IsPart1:
