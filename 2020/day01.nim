@@ -1,4 +1,4 @@
-import std/[strutils, sequtils, math]
+import std/[sequtils, math]
 
 const Entries = when IsPart1: 2 else: 3
 const SumTarget = 2020
