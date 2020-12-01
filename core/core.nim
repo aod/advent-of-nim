@@ -1,4 +1,4 @@
-import std/[options, strformat, strutils]
+import std/[options, strformat, strutils, math]
 export options, strformat, strutils
 
 const IsPart2* = defined(part2)
