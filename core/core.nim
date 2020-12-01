@@ -4,13 +4,14 @@ export options, strformat, strutils
 const IsPart2* = defined(part2)
 const IsPart1* = not IsPart2
 const P* = if IsPart1: 1 else: 2
+const OutputPrefix* = &"Part {P}: "
 
 iterator partial*[T](s: openArray[T], n: Positive = 3): seq[T] =
   for i in s.low .. s.len - n:
     yield s[i ..< i + n]
 
 # stolen from: https://forum.nim-lang.org/t/2812#37721
-iterator choose*[T](a: openArray[T], num_choose: int): seq[T] =
+iterator choose*[T](a: openArray[T], numChoose: int): seq[T] =
   var
     chosen = newSeqOfCap[T](numChoose)
     i = 0
