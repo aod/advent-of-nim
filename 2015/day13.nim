@@ -1,5 +1,4 @@
 import std/[tables, sequtils, algorithm, strscans]
-import ./core
 
 type
   Name = string

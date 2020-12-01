@@ -1,5 +1,4 @@
 import std/json
-import ./core
 
 func sumAllNumbers(node: JsonNode): int =
   case node.kind:

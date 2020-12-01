@@ -9,6 +9,28 @@ iterator partial*[T](s: openArray[T], n: Positive = 3): seq[T] =
   for i in s.low .. s.len - n:
     yield s[i ..< i + n]
 
+# stolen from: https://forum.nim-lang.org/t/2812#37721
+iterator choose*[T](a: openArray[T], num_choose: int): seq[T] =
+  var
+    chosen = newSeqOfCap[T](numChoose)
+    i = 0
+    iStack = newSeqOfCap[int](numChoose)
+
+  while true:
+    if chosen.len == numChoose:
+      yield chosen
+      discard chosen.pop()
+      i = iStack.pop() + 1
+    elif i != a.len:
+      chosen.add(a[i])
+      iStack.add(i)
+      inc i
+    elif iStack.len > 0:
+      discard chosen.pop()
+      i = iStack.pop() + 1
+    else:
+      break
+
 func hasStraightIncrease*[T: Ordinal](xs: openArray[T]): bool =
   for x in xs.partial(2):
     if ord(x[1]) - ord(x[0]) != 1:

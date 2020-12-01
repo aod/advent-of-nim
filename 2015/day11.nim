@@ -1,5 +1,3 @@
-import ./core
-
 type Password = string
 
 func has3LettersIncrease(password: Password): bool =

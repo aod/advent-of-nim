@@ -1,5 +1,4 @@
 import std/[algorithm, sequtils, sugar, strscans]
-import ./core
 
 type
   Teaspoons = int
