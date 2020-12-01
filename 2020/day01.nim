@@ -4,11 +4,10 @@ const Entries = when IsPart1: 2 else: 3
 const SumTarget = 2020
 
 proc solve(input: string): int =
-  let numbers = input.splitLines.toSeq.map parseInt
-  for xs in numbers.choose Entries:
+  let expenses = input.splitLines.toSeq.map parseInt
+  for xs in expenses.choose Entries:
     if xs.sum == SumTarget:
       return xs.prod
-
   quit &"Could not find {Entries} entries that sum to {SumTarget}"
 
 when isMainModule:
