@@ -13,6 +13,7 @@ proc parse(s: string): Record =
                       result.policy.max,
                       l,
                       result.password)
+  # FIXME: this is hackish
   result.letter = l[0]
 
 proc solve(input: string): int =
