@@ -5,7 +5,7 @@ const SumTarget = 2020
 
 proc solve(input: string): int =
   let expenses = input.splitLines.toSeq.map parseInt
-  for xs in expenses.choose Entries:
+  for xs in expenses.comb Entries:
     if xs.sum == SumTarget:
       return xs.prod
   quit &"Could not find {Entries} entries that sum to {SumTarget}"

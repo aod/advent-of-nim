@@ -10,27 +10,36 @@ iterator partial*[T](s: openArray[T], n: Positive = 3): seq[T] =
   for i in s.low .. s.len - n:
     yield s[i ..< i + n]
 
-# stolen from: https://forum.nim-lang.org/t/2812#37721
-iterator choose*[T](a: openArray[T], numChoose: int): seq[T] =
-  var
-    chosen = newSeqOfCap[T](numChoose)
-    i = 0
-    iStack = newSeqOfCap[int](numChoose)
+# stolen from: http://rosettacode.org/wiki/Combinations#Nim
+iterator comb*[T: Natural](m: T, n: Positive): seq[T] =
+  var c = newSeq[T](n)
+  for i in 0..<n: c[i] = i
 
-  while true:
-    if chosen.len == numChoose:
-      yield chosen
-      discard chosen.pop()
-      i = iStack.pop() + 1
-    elif i != a.len:
-      chosen.add(a[i])
-      iStack.add(i)
-      inc i
-    elif iStack.len > 0:
-      discard chosen.pop()
-      i = iStack.pop() + 1
-    else:
-      break
+  block outer:
+    while true:
+      yield c
+
+      var i = n - 1
+      inc c[i]
+      if c[i] <= m - 1:
+        continue
+
+      while c[i] >= m - n + i:
+        dec i
+        if i < 0:
+          break outer
+
+      inc c[i]
+      while i < n - 1:
+        c[i + 1] = c[i] + 1
+        inc i
+
+iterator comb*[T](xs: openArray[T], n: Positive): seq[T] =
+  var ys = newSeq[T](n)
+  for c in comb(xs.len, n):
+    for i in 0..<n:
+      ys[i] = xs[c[i]]
+    yield ys
 
 func hasStraightIncrease*[T: Ordinal](xs: openArray[T]): bool =
   for x in xs.partial(2):
