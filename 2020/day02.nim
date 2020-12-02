@@ -16,17 +16,15 @@ proc parse(s: string): Record =
   result.letter = l[0]
 
 proc solve(input: string): int =
-  var records = input.splitLines.toSeq.map parse
-  for record in records:
+  for record in input.splitLines.toSeq.map parse:
     let (min, max) = record.policy
     when IsPart1:
       var sum = record.password.count(record.letter)
       if sum >= min and sum <= max:
         result += 1
     else:
-      let valid = (record.password[min - 1] == record.letter,
-                   record.password[max - 1] == record.letter)
-      if valid == (true, false) or valid == (false, true):
+      if record.password[min - 1] == record.letter xor
+         record.password[max - 1] == record.letter:
         result += 1
 
 when isMainModule:
