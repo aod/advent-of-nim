@@ -2,15 +2,15 @@ import std/[strscans, sequtils]
 
 type
   Record = object
-    policy: tuple[min, max: int]
+    policy: (int, int)
     letter: char
     password: string
 
 proc parse(s: string): Record =
   const p = "$i-$i $w: $w$."
   var l: string
-  discard scanf(s, p, result.policy.min,
-                      result.policy.max,
+  discard scanf(s, p, result.policy[0],
+                      result.policy[1],
                       l,
                       result.password)
   # FIXME: this is hackish
@@ -18,14 +18,14 @@ proc parse(s: string): Record =
 
 proc solve(input: string): int =
   for record in input.splitLines.toSeq.map parse:
-    let (min, max) = record.policy
+    let policy = record.policy
     when IsPart1:
-      var sum = record.password.count(record.letter)
-      if sum >= min and sum <= max:
+      let sum = record.password.count(record.letter)
+      if sum >= policy[0] and sum <= policy[1]:
         result += 1
     else:
-      if record.password[min - 1] == record.letter xor
-         record.password[max - 1] == record.letter:
+      if record.password[policy[0] - 1] == record.letter xor
+         record.password[policy[1] - 1] == record.letter:
         result += 1
 
 when isMainModule:
