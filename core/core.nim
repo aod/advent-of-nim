@@ -1,6 +1,8 @@
 import std/[options, strformat, strutils, math]
 export options, strformat, strutils
 
+include ./vec
+
 const IsPart2* = defined(part2)
 const IsPart1* = not IsPart2
 const P* = if IsPart1: 1 else: 2

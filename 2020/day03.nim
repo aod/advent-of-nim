@@ -17,15 +17,16 @@ proc parse(s: string): Map =
         quit "Invalid square in input"
     result.add move(row)
 
-proc solve(input: string; slope: (int, int)): int =
+proc solve(input: string; slope: Vec2[int]): int =
   let grid = input.parse
   let width = grid[0].len
 
-  var pos = (0, 0)
+  var pos: Vec2[int]
   while pos[1] < grid.high:
-    pos[1] += slope[1]
-    pos[0] = (pos[0] + slope[0]) mod width
-    if grid[pos[1]][pos[0]] == skTree:
+    pos.y += slope.y
+    pos.x = (pos.x + slope.x) mod width
+
+    if grid[pos] == skTree:
       result += 1
 
 when isMainModule:
