@@ -53,17 +53,17 @@ proc parse(input: string): seq[Passport] =
     else:
       for pairs in line.splitWhitespace:
         let pair = pairs.split":"
-        let (key, val) = (pair[0], pair[1])
-        case key:
-        of "byr": tmp[fkByr] = val
-        of "iyr": tmp[fkIyr] = val
-        of "eyr": tmp[fkEyr] = val
-        of "hgt": tmp[fkHgt] = val
-        of "hcl": tmp[fkHcl] = val
-        of "ecl": tmp[fkEcl] = val
-        of "pid": tmp[fkPid] = val
-        of "cid": tmp[fkCid] = val
-        else: quit &"Uknown required field in input {key}"
+        let fk = case pair[0]:
+        of "byr": fkByr
+        of "iyr": fkIyr
+        of "eyr": fkEyr
+        of "hgt": fkHgt
+        of "hcl": fkHcl
+        of "ecl": fkEcl
+        of "pid": fkPid
+        of "cid": fkCid
+        else: quit &"Unknown required field `{pair[0]}` in input"
+        tmp[fk] = pair[1]
   if tmp.len != 0:
     result.add move(tmp)
 
