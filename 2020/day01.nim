@@ -4,7 +4,7 @@ const Entries = when IsPart1: 2 else: 3
 const SumTarget = 2020
 
 proc solve(input: string): int =
-  let expenses = input.splitLines.toSeq.map parseInt
+  let expenses = input.splitLines.map parseInt
   for xs in expenses.comb Entries:
     if xs.sum == SumTarget:
       return xs.prod

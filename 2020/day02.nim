@@ -17,7 +17,7 @@ proc parse(s: string): Record =
   result.letter = l[0]
 
 proc solve(input: string): int =
-  for record in input.splitLines.toSeq.map parse:
+  for record in input.splitLines.map parse:
     let policy = record.policy
     when IsPart1:
       let sum = record.password.count(record.letter)
