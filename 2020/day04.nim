@@ -5,7 +5,6 @@ when IsPart2:
 type
   FieldKind = enum
     fkByr, fkIyr, fkEyr, fkHgt, fkHcl, fkEcl, fkPid, fkCid
-
   Passport = Table[FieldKind, string]
 
 const FieldAmount = 8
@@ -15,12 +14,9 @@ proc isValid(fk: FieldKind; value: string): bool =
     true
   else:
     case fk:
-    of fkByr:
-      return value >= "1920" and "2002" >= value
-    of fkIyr:
-      return value >= "2010" and "2020" >= value
-    of fkEyr:
-      return value >= "2020" and "2030" >= value
+    of fkByr: value >= "1920" and "2002" >= value
+    of fkIyr: value >= "2010" and "2020" >= value
+    of fkEyr: value >= "2020" and "2030" >= value
     of fkHgt:
       if value[^1] == 'n':
         let num = value.split"i"[0].parseInt
@@ -28,31 +24,26 @@ proc isValid(fk: FieldKind; value: string): bool =
       elif value[^1] == 'm':
         let num = value.split"c"[0].parseInt
         return num >= 150 and 193 >= num
-      return false
+      false
     of fkHcl:
       let rest = value[1 .. ^1]
-      return value[0] == '#' and rest.len == 6 and rest.all(x => x in HexDigits)
-    of fkEcl:
-      return value in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
-    of fkPid:
-      return value.len == 9 and value.all(x => x in Digits)
-    of fkCid:
-      return true
+      value[0] == '#' and rest.len == 6 and rest.all(x => x in HexDigits)
+    of fkEcl: value in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+    of fkPid: value.len == 9 and value.all(x => x in Digits)
+    of fkCid: true
 
 proc isValid(p: Passport): bool =
-  var specialCase: bool = true
+  var hasValidFields: bool = true
   when IsPart2:
     for fk, val in p.pairs:
       if not fk.isValid val:
-        specialCase = false
+        hasValidFields = false
         break
-    # why p.keys not exist?
-    # p.keys.toSeq.keepIf(fk => fk.isValid(p[fk])).len >= FieldAmount - 1
 
   let hasAllFields = p.len == FieldAmount
-  let hasNoCID = not p.hasKey(fkCid)
+  let hasCIDField = p.hasKey(fkCid)
   let isMissingOneField = p.len == FieldAmount - 1
-  (hasAllFields or (hasNoCID and isMissingOneField)) and specialCase
+  (hasAllFields or (not hasCIDField and isMissingOneField)) and hasValidFields
 
 proc parse(input: string): seq[Passport] =
   var tmp: Passport
