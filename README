@@ -1,1 +1,3 @@
 Advent of Code solutions in Nim :)
+
+NOTE: Compile with `-d:part2` flag to run part 2.
