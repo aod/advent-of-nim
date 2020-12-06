@@ -12,7 +12,7 @@ proc solve(input: string): int =
       result += (group.toHashSet - "\n".toHashSet).len
     else:
       result += group.strip.splitLines.map(line => line.toHashSet)
-        .foldl(a * b, "abcedfghijklmnopqrstuvwxyz".toHashSet)
+        .foldl(a * b, "abcdefghijklmnopqrstuvwxyz".toHashSet)
         .len
 
 when isMainModule:
