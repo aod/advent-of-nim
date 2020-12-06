@@ -14,7 +14,7 @@ proc solve(input: string): int =
       result += unique.len
     else:
       var unique = "abcedfghijklmnopqrstuvwxyz".toHashSet
-      for line in input[cursor ..< cursor + nParsed].strip.splitLines:
+      for line in group.strip.splitLines:
         unique = unique * line.toHashSet
       result += unique.len
 
