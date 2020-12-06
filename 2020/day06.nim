@@ -4,7 +4,7 @@ when IsPart2: import std/[sugar, sequtils]
 proc solve(input: string): int =
   var cursor = 0
 
-  while cursor <= input.high:
+  while cursor < input.len:
     var group: string
     cursor += parseUntil(input, group, "\n\n", cursor) + 1
 
