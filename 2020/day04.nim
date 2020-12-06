@@ -1,49 +1,43 @@
 import std/[tables, sequtils]
-when IsPart2:
-  import  std/sugar
+when IsPart2: import std/[sugar, parseutils]
 
 type
   FieldKind = enum
     fkByr, fkIyr, fkEyr, fkHgt, fkHcl, fkEcl, fkPid, fkCid
   Passport = Table[FieldKind, string]
 
-const FieldAmount = 8
+const FieldAmount = FieldKind.high.ord + 1
 
-proc isValid(fk: FieldKind; value: string): bool =
-  when IsPart1:
-    true
-  else:
+when IsPart2:
+  proc isValid(fk: FieldKind; value: string): bool =
     case fk:
     of fkByr: value >= "1920" and "2002" >= value
     of fkIyr: value >= "2010" and "2020" >= value
     of fkEyr: value >= "2020" and "2030" >= value
     of fkHgt:
-      if value[^1] == 'n':
-        let num = value.split"i"[0].parseInt
-        return num >= 59 and 76 >= num
-      elif value[^1] == 'm':
-        let num = value.split"c"[0].parseInt
-        return num >= 150 and 193 >= num
-      false
-    of fkHcl:
-      let rest = value[1 .. ^1]
-      value[0] == '#' and rest.len == 6 and rest.all(x => x in HexDigits)
+      var num: int
+      var unit: string
+      discard parseUntil(value, unit, Whitespace, parseInt(value, num))
+      case unit:
+      of "cm": num >= 150 and 193 >= num
+      of "in": num >= 59 and 76 >= num
+      else: false
+    of fkHcl: value.len == 7 and value[0] == '#' and value[1 .. ^1].all(x => x in HexDigits)
     of fkEcl: value in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
     of fkPid: value.len == 9 and value.all(x => x in Digits)
     of fkCid: true
 
-proc isValid(p: Passport): bool =
-  var hasValidFields: bool = true
+proc hasValidFields(p: Passport): bool =
+  result = true
   when IsPart2:
     for fk, val in p.pairs:
-      if not fk.isValid val:
-        hasValidFields = false
-        break
+      if not fk.isValid val: return false
 
+proc isValid(p: Passport): bool =
   let hasAllFields = p.len == FieldAmount
   let hasCIDField = p.hasKey(fkCid)
   let isMissingOneField = p.len == FieldAmount - 1
-  (hasAllFields or (not hasCIDField and isMissingOneField)) and hasValidFields
+  (hasAllFields or (not hasCIDField and isMissingOneField)) and p.hasValidFields
 
 proc parse(input: string): seq[Passport] =
   var tmp: Passport
