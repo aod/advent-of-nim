@@ -1,22 +1,19 @@
 import std/[parseutils, sets]
+when IsPart2: import std/[sugar, sequtils]
 
 proc solve(input: string): int =
   var cursor = 0
 
   while cursor <= input.high:
     var group: string
-    var nParsed = parseUntil(input, group, "\n\n", cursor)
-    defer: cursor += nParsed + 1
+    cursor += parseUntil(input, group, "\n\n", cursor) + 1
 
     when IsPart1:
-      var unique = group.toHashSet
-      unique.excl('\n')
-      result += unique.len
+      result += (group.toHashSet - "\n".toHashSet).len
     else:
-      var unique = "abcedfghijklmnopqrstuvwxyz".toHashSet
-      for line in group.strip.splitLines:
-        unique = unique * line.toHashSet
-      result += unique.len
+      result += group.strip.splitLines.map(line => line.toHashSet)
+        .foldl(a * b, "abcedfghijklmnopqrstuvwxyz".toHashSet)
+        .len
 
 when isMainModule:
   echo OutputPrefix, stdin.readAll.strip.solve
