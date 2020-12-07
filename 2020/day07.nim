@@ -3,7 +3,7 @@ import std/[parseutils, tables, strformat, sets]
 
 type
   Color = string
-  Inner = (Natural , Bag)
+  Inner = (Natural, Bag)
   Bags = seq[Inner]
   Bag = ref object
     color: Color
@@ -12,7 +12,7 @@ type
 const ShinyGold: Color = "shiny gold"
 
 
-proc parse(input: string): Table[Color, Bag] =
+func parse(input: string): Table[Color, Bag] =
   for rule in input.splitLines:
     var color: Color
     var i = parseUntil(rule, color, " bags")
@@ -36,7 +36,7 @@ proc parse(input: string): Table[Color, Bag] =
       children.add move(child)
 
 
-proc part1(bag: Bag; seen: var HashSet[Color]): int =
+func part1(bag: Bag; seen: var HashSet[Color]): int =
   if bag.color.startsWith ShinyGold: return 1
   if bag.bags.isNone: return 0
   if bag.color in seen: return 1
@@ -48,13 +48,13 @@ proc part1(bag: Bag; seen: var HashSet[Color]): int =
       result += res
 
 
-proc part2(bag: Bag): int =
+func part2(bag: Bag): int =
   if bag.bags.isNone: return 0
   for (n, inner) in bag.bags.get:
     result += n + n * inner.part2
 
 
-proc find(bag: Bag; color: Color): Bag =
+func find(bag: Bag; color: Color): Bag =
   if bag.color == color: return bag
   if bag.bags.isNone: return nil
 
@@ -79,7 +79,7 @@ func createRootBag(bags: Table[Color, Bag]): Bag =
   Bag(bags: some(outerBags))
 
 
-proc solve(input: string): int =
+func solve(input: string): int =
   let root = input.parse.createRootBag
 
   when IsPart1:
