@@ -1,23 +1,24 @@
 import std/[parseutils, tables, strformat, sets]
 
+
 type
-  Bags = seq[(int, Bag)]
+  Color = string
+  Inner = (Natural , Bag)
+  Bags = seq[Inner]
   Bag = ref object
-    name: string
+    color: Color
     bags: Option[Bags]
 
-
-proc `$`(self: Bag): string =
-  &"{self.name} -> {self.bags}"
+const ShinyGold: Color = "shiny gold"
 
 
-proc parse(input: string): Table[string, Bag] =
+proc parse(input: string): Table[Color, Bag] =
   for rule in input.splitLines:
-    var name: string
-    var i = parseUntil(rule, name, " bags")
-    var bag = result.mgetOrPut(name, Bag(name: move(name)))
+    var color: Color
+    var i = parseUntil(rule, color, " bags")
+    var bag = result.mgetOrPut(color, Bag(color: move(color)))
 
-    var children: seq[(int, Bag)]
+    var children: Bags
     defer:
       if children.len > 0: bag.bags = some(children)
 
@@ -25,69 +26,69 @@ proc parse(input: string): Table[string, Bag] =
       i += skipUntil(rule, Digits, i)
       if i == rule.len: break
 
-      var child: (int, Bag)
-      var childName: string
+      var child: Inner
+      var childColor: Color
       i += parseInt(rule, child[0], i)
       i += skipWhitespace(rule, i)
-      i += parseUntil(rule, childName, " bag", i)
+      i += parseUntil(rule, childColor, " bag", i)
 
-      child[1] = result.mgetOrPut(childName, Bag(name: move(childName)))
+      child[1] = result.mgetOrPut(childColor, Bag(color: move(childColor)))
       children.add move(child)
 
 
-proc nYellowBags(bag: Bag; memo: var HashSet[string]; name: string): int =
-  if bag.name.startsWith name: return 1
+proc part1(bag: Bag; seen: var HashSet[Color]): int =
+  if bag.color.startsWith ShinyGold: return 1
   if bag.bags.isNone: return 0
-  if bag.name in memo: return 1
+  if bag.color in seen: return 1
 
   for (_, child) in bag.bags.get:
-    let res = nYellowBags(child, memo, name)
+    let res = part1(child, seen)
     if res > 0:
-      memo.incl bag.name
+      seen.incl bag.color
       result += res
 
 
-proc find(bag: Bag; name: string): Bag =
-  if bag.name == name: return bag
+proc part2(bag: Bag): int =
+  if bag.bags.isNone: return 0
+  for (n, inner) in bag.bags.get:
+    result += n + n * inner.part2
+
+
+proc find(bag: Bag; color: Color): Bag =
+  if bag.color == color: return bag
   if bag.bags.isNone: return nil
 
   for (_, inner) in bag.bags.get:
-    let target = inner.find(name)
+    let target = inner.find(color)
     if target != nil:
       return target
 
 
-proc nBagsRequired(bag: Bag): int =
-  if bag.bags.isNone: return 0
-
-  for (n, inner) in bag.bags.get:
-    result += n + n * inner.nBagsRequired
-
-
-proc solve(input: string): int =
-  let bags = input.parse
-
-  var bagsWithBags: HashSet[string]
+func createRootBag(bags: Table[Color, Bag]): Bag =
+  var allInnerBags: HashSet[Color]
   for bag in bags.values:
     if bag.bags.isSome:
       for (_, child) in bag.bags.get:
-        bagsWithBags.incl child.name
+        allInnerBags.incl child.color
 
-  var startingBags: Bags
+  var outerBags: Bags
   for bag in bags.values:
-    if bag.name notin bagsWithBags:
-      startingBags.add (1, bag)
+    if bag.color notin allInnerBags:
+      outerBags.add (Natural(1), bag)
 
-  var root = Bag(bags: some(startingBags))
-  const LookUp = "shiny gold"
+  Bag(bags: some(outerBags))
+
+
+proc solve(input: string): int =
+  let root = input.parse.createRootBag
 
   when IsPart1:
-    var seen: HashSet[string]
-    discard root.nYellowBags(seen, LookUp)
+    var seen: HashSet[Color]
+    discard root.part1(seen)
     seen.len - 1
   else:
-    let shiny = root.find(LookUp)
-    shiny.nBagsRequired
+    let shinyBag = root.find(ShinyGold)
+    shinyBag.part2
 
 
 when isMainModule:
